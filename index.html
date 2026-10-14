@@ -97,7 +97,6 @@
         <!-- 01. Hero Section -->
         <section class="section s-hero padding-x" id="home">
             <div class="hero-content">
-                <div class="t-caption text-muted mb-4 gs-fade" style="letter-spacing: 0.25em;">ELECTRICAL · RENOVATION · SMART LIGHTING</div>
                 <h1 class="t-display split-words">Super Line</h1>
                 <h1 class="t-display split-words" style="margin-left: 8vw;"><span class="italic">Electrical</span> &amp; Renovation</h1>
             </div>
@@ -305,7 +304,12 @@
                 </div>
 
                 <div class="contact-form-wrap gs-fade">
-                    <form class="contact-form" id="contactForm" onsubmit="handleContactSubmit(event)">
+                    <form class="contact-form" id="contactForm" action="https://formsubmit.co/ajax/info@superlineelectricalandrenovation.ca" method="POST" onsubmit="handleContactSubmit(event)">
+                        <!-- FormSubmit Configuration Fields -->
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="hidden" name="_template" value="table">
+                        <input type="hidden" name="_subject" value="New Consultation Request - Superline Electrical & Renovation">
+
                         <h3 class="t-h3 mb-6" style="font-style: normal; font-family: var(--font-sans); font-size: 1.6rem; font-weight: 500; color: #111111;">Request a Free Consultation</h3>
 
                         <div class="form-row">

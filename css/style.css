@@ -383,6 +383,26 @@ body.theme-dark .cursor-ring.active {
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
 }
 
+/* Mobile Scroll Lock on Body & HTML */
+html.mobile-nav-open {
+    overflow: hidden !important;
+    height: 100% !important;
+    overscroll-behavior: none !important;
+}
+
+body.mobile-nav-open {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    touch-action: none !important;
+    overscroll-behavior: none !important;
+    -webkit-overflow-scrolling: auto !important;
+}
+
 /* Fullscreen Mobile Navigation Overlay */
 .mobile-nav-drawer {
     position: fixed;
@@ -398,6 +418,8 @@ body.theme-dark .cursor-ring.active {
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.4s ease, visibility 0.4s ease;
+    touch-action: none;
+    overscroll-behavior: contain;
 }
 
 .mobile-nav-drawer.is-open {
@@ -418,8 +440,9 @@ body.theme-dark .cursor-ring.active {
     max-width: 100vw !important;
     height: 100vh !important;
     height: 100dvh !important;
-    background: #000000a8;
-    backdrop-filter: blur(20px);
+    background: rgba(18, 16, 14, 0.94);
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
     color: #F2EFE9;
     padding: clamp(1.5rem, 4vh, 2.8rem) clamp(1.5rem, 6vw, 4rem);
     display: flex;
@@ -430,6 +453,8 @@ body.theme-dark .cursor-ring.active {
     transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    overscroll-behavior: contain;
     z-index: 100001;
 }
 
@@ -1263,9 +1288,9 @@ body.theme-dark .l-item {
    09. CONTACT US SECTION (Pristine White Architectural Theme)
    ========================================================================== */
 .s-contact {
-    min-height: 100vh;
-    padding-top: 14vh;
-    padding-bottom: 14vh;
+    min-height: auto;
+    padding-top: clamp(4.5rem, 9vh, 7.5rem);
+    padding-bottom: clamp(4.5rem, 9vh, 7.5rem);
     background-color: #ffffff !important;
     color: #1c1a17 !important;
     border-top: 1px solid rgba(0, 0, 0, 0.08);
@@ -1283,7 +1308,8 @@ body.theme-dark .l-item {
 
 .contact-info {
     display: flex;
-    height: 100vh;
+    min-height: auto;
+    height: auto;
     justify-content: center;
     align-items: flex-start;
     flex-direction: column;
@@ -1446,13 +1472,27 @@ body.theme-dark .l-item {
 
 .form-feedback {
     display: none;
-    padding: 0.9rem 1.2rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
+    padding: 1rem 1.4rem;
+    border-radius: 10px;
+    font-size: 0.92rem;
+    line-height: 1.5;
     background: rgba(183, 92, 64, 0.08);
     border: 1px solid var(--accent);
     color: #111111;
     text-align: center;
+    transition: all 0.3s ease;
+}
+
+.form-feedback.is-success {
+    background: rgba(22, 163, 74, 0.08);
+    border-color: #16a34a;
+    color: #166534;
+}
+
+.form-feedback.is-error {
+    background: rgba(220, 38, 38, 0.08);
+    border-color: #dc2626;
+    color: #991b1b;
 }
 
 /* ==========================================================================
@@ -2391,7 +2431,7 @@ img, .img-mask, .brand-logo-img, .modal-img {
         letter-spacing: 0.18em;
     }
     .hero-content .t-display {
-        font-size: clamp(2.75rem, 11vw, 3.8rem) !important;
+        font-size: clamp(2.75rem, 18vw, 5rem) !important;
         line-height: 0.94 !important;
     }
     .hero-img-box {

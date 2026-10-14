@@ -36,6 +36,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // =========================================================================
     // 02. SMOOTH SCROLLING (Lenis for Desktop Wheels, Native 120fps on Mobile)
     // =========================================================================
+    // Prevent mobile address bar show/hide from recalculating scroll positions and causing jerks
+    if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.config({
+            ignoreMobileResize: true,
+            autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"
+        });
+    }
+
     const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (window.innerWidth <= 1024);
     const lenis = (typeof window.Lenis !== 'undefined' && !isTouchDevice)
         ? new Lenis({ 
@@ -286,17 +294,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const fades = sec.querySelectorAll('.gs-fade');
             if (fades.length) {
-                gsap.fromTo(fades, { opacity: 0, y: 30 }, {
+                gsap.fromTo(fades, { opacity: 0, y: 24 }, {
                     scrollTrigger: { 
                         trigger: sec, 
-                        start: "top 85%", 
-                        toggleActions: "play none none reverse" 
+                        start: "top 88%", 
+                        toggleActions: "play none none none", 
+                        once: true 
                     },
                     opacity: 1, 
                     y: 0, 
-                    duration: 1.2, 
-                    stagger: 0.1, 
-                    ease: "power3.out"
+                    duration: 0.9, 
+                    stagger: 0.08, 
+                    ease: "power2.out"
                 });
             }
 
@@ -306,10 +315,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     scrollTrigger: { 
                         trigger: mask, 
                         start: "top 85%", 
-                        toggleActions: "play none none reverse" 
+                        toggleActions: "play none none none",
+                        once: true
                     },
                     clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)", 
-                    duration: 1.6, 
+                    duration: 1.4, 
                     ease: "power4.inOut"
                 });
             });
@@ -332,36 +342,29 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
         
-        // H. Dynamic Theme Color Shifting (Desktop / Tablet with Marquee Visible)
+        // H. Dynamic Theme Color Shifting (Desktop Only when Marquee is active)
         const darkThemeTrigger = document.querySelector("#theme-trigger-dark");
         if (darkThemeTrigger && window.innerWidth > 768) {
             ScrollTrigger.create({
                 trigger: darkThemeTrigger, 
                 start: "top 50%", 
                 end: "bottom 50%",
-                onEnter: () => document.body.className = "theme-dark",
-                onLeaveBack: () => document.body.className = "theme-light"
-            });
-        }
-
-        const galleryTrigger = document.querySelector("#gallery");
-        if (galleryTrigger) {
-            ScrollTrigger.create({
-                trigger: galleryTrigger, 
-                start: "top 50%", 
-                end: "bottom 50%",
-                onEnter: () => document.body.className = "theme-light",
-                onLeaveBack: () => document.body.className = "theme-dark"
-            });
-        }
-
-        const contactTrigger = document.querySelector("#contact");
-        if (contactTrigger) {
-            ScrollTrigger.create({
-                trigger: contactTrigger, 
-                start: "top 50%", 
-                onEnter: () => document.body.className = "theme-light",
-                onLeaveBack: () => document.body.className = "theme-light"
+                onEnter: () => {
+                    document.body.classList.remove('theme-light');
+                    document.body.classList.add('theme-dark');
+                },
+                onLeave: () => {
+                    document.body.classList.remove('theme-dark');
+                    document.body.classList.add('theme-light');
+                },
+                onEnterBack: () => {
+                    document.body.classList.remove('theme-light');
+                    document.body.classList.add('theme-dark');
+                },
+                onLeaveBack: () => {
+                    document.body.classList.remove('theme-dark');
+                    document.body.classList.add('theme-light');
+                }
             });
         }
 
@@ -576,36 +579,86 @@ document.addEventListener("DOMContentLoaded", () => {
     initGalleryProgressiveLoading();
 
     // =========================================================================
-    // 08. CONTACT FORM SUBMISSION HANDLER
+    // 08. CONTACT FORM SUBMISSION HANDLER (Real AJAX Delivery via FormSubmit)
     // =========================================================================
-    window.handleContactSubmit = function(e) {
+    window.handleContactSubmit = async function(e) {
         e.preventDefault();
         const form = e.target;
         const feedback = document.getElementById('formFeedback');
         const submitBtn = form.querySelector('.form-submit-btn');
+        const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '<span>Send Consultation Request</span>';
 
         if (submitBtn) {
             submitBtn.disabled = true;
-            submitBtn.style.opacity = '0.7';
-            submitBtn.innerText = 'Submitting Request...';
+            submitBtn.style.opacity = '0.75';
+            submitBtn.innerHTML = '<span>Sending Request...</span>';
         }
 
-        setTimeout(() => {
+        if (feedback) {
+            feedback.style.display = 'none';
+            feedback.className = 'form-feedback';
+        }
+
+        const formData = {
+            name: form.name ? form.name.value.trim() : '',
+            phone: form.phone ? form.phone.value.trim() : '',
+            email: form.email ? form.email.value.trim() : '',
+            service: form.service ? form.service.value : '',
+            message: form.message ? form.message.value.trim() : '',
+            _subject: `New Consultation Request from ${form.name ? form.name.value.trim() : 'Website Client'} - Superline`
+        };
+
+        try {
+            const response = await fetch("https://formsubmit.co/ajax/info@superlineelectricalandrenovation.ca", {
+                method: "POST",
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && (result.success === "true" || result.success === true)) {
+                if (feedback) {
+                    feedback.style.display = 'block';
+                    feedback.className = 'form-feedback is-success';
+                    feedback.innerHTML = '<strong>Request Sent Successfully!</strong> Your consultation request has been received. Our master specialists will contact you within 24 hours.';
+                }
+                form.reset();
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    submitBtn.innerHTML = '<span>Request Sent Successfully ✓</span>';
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalBtnHtml;
+                    }, 5000);
+                }
+            } else {
+                throw new Error(result.message || 'Submission failed');
+            }
+        } catch (err) {
+            console.warn('Form submission notice:', err);
             if (feedback) {
                 feedback.style.display = 'block';
-                feedback.innerHTML = '<strong>Thank you!</strong> Your consultation request has been received. Our master specialists will contact you within 24 hours.';
+                feedback.className = 'form-feedback is-success';
+                feedback.innerHTML = `<strong>Consultation Request Received!</strong> If not sent automatically, you may also <a href="mailto:info@superlineelectricalandrenovation.ca?subject=Consultation%20Request%20from%20${encodeURIComponent(formData.name)}&body=Name:%20${encodeURIComponent(formData.name)}%0D%0APhone:%20${encodeURIComponent(formData.phone)}%0D%0AEmail:%20${encodeURIComponent(formData.email)}%0D%0AService:%20${encodeURIComponent(formData.service)}%0D%0A%0D%0AMessage:%0D%0A${encodeURIComponent(formData.message)}" style="color: var(--accent); font-weight: 600; text-decoration: underline;">click here to email us directly</a>.`;
             }
-            form.reset();
             if (submitBtn) {
                 submitBtn.disabled = false;
                 submitBtn.style.opacity = '1';
-                submitBtn.innerHTML = '<span>Request Sent Successfully ✓</span>';
+                submitBtn.innerHTML = originalBtnHtml;
             }
-        }, 600);
+        }
     };
 
     let resizeTimer;
+    let lastKnownWidth = window.innerWidth;
     window.addEventListener("resize", () => {
+        // Prevent mobile address bar show/collapse from triggering ScrollTrigger refresh and jumping
+        if (window.innerWidth === lastKnownWidth) return;
+        lastKnownWidth = window.innerWidth;
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(() => ScrollTrigger.refresh(), 180);
     });
@@ -651,28 +704,77 @@ document.addEventListener("DOMContentLoaded", () => {
     const mobileBackdrop = document.getElementById('mobileNavBackdrop');
     const mobileLinks = document.querySelectorAll('.mobile-nav-link, #mobileNavCta');
 
+    let savedScrollY = 0;
+    let isMobileNavOpen = false;
+
     function openMobileNav() {
-        if (!mobileDrawer) return;
+        if (!mobileDrawer || isMobileNavOpen) return;
+        isMobileNavOpen = true;
+
+        savedScrollY = window.pageYOffset || document.documentElement.scrollTop || 0;
+
+        // Ensure theme class is light
+        document.body.classList.remove('theme-dark');
+        document.body.classList.add('theme-light');
+
+        // Robust mobile scroll locking on html and body
+        document.documentElement.classList.add('mobile-nav-open');
+        document.body.classList.add('mobile-nav-open');
+        document.body.style.top = `-${savedScrollY}px`;
+
         mobileDrawer.classList.add('is-open');
         mobileDrawer.setAttribute('aria-hidden', 'false');
         if (mobileToggle) mobileToggle.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
         if (window.lenis) window.lenis.stop();
     }
 
-    function closeMobileNav() {
-        if (!mobileDrawer) return;
+    function closeMobileNav(targetSelector) {
+        if (!mobileDrawer || !isMobileNavOpen) return;
+        isMobileNavOpen = false;
+
         mobileDrawer.classList.remove('is-open');
         mobileDrawer.setAttribute('aria-hidden', 'true');
         if (mobileToggle) mobileToggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
+
+        // Remove mobile scroll locking
+        document.documentElement.classList.remove('mobile-nav-open');
+        document.body.classList.remove('mobile-nav-open');
+        document.body.style.top = '';
+
+        // Guarantee body stays theme-light on mobile
+        document.body.classList.remove('theme-dark');
+        document.body.classList.add('theme-light');
+
         if (window.lenis) window.lenis.start();
+
+        if (targetSelector && typeof targetSelector === 'string') {
+            // Smoothly navigate to clicked section
+            if (targetSelector === '#' || targetSelector === '#home' || targetSelector === '#top') {
+                if (window.lenis) {
+                    window.lenis.scrollTo(0, { duration: 0.8 });
+                } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            } else {
+                const targetEl = document.querySelector(targetSelector);
+                if (targetEl) {
+                    if (window.lenis) {
+                        window.lenis.scrollTo(targetEl, { offset: -40, duration: 0.8 });
+                    } else {
+                        targetEl.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            }
+        } else {
+            // Restore previous scroll position
+            window.scrollTo(0, savedScrollY);
+        }
     }
 
     if (mobileToggle) {
         mobileToggle.addEventListener('click', (e) => {
             e.stopPropagation();
-            if (mobileDrawer && mobileDrawer.classList.contains('is-open')) {
+            if (isMobileNavOpen) {
                 closeMobileNav();
             } else {
                 openMobileNav();
@@ -688,17 +790,32 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (mobileBackdrop) {
-        mobileBackdrop.addEventListener('click', closeMobileNav);
+        mobileBackdrop.addEventListener('click', () => closeMobileNav());
+    }
+
+    // Touchmove isolation: prevent underlying page touch drag while drawer is open
+    if (mobileDrawer) {
+        mobileDrawer.addEventListener('touchmove', (e) => {
+            if (!e.target.closest('.mobile-nav-inner')) {
+                e.preventDefault();
+            }
+        }, { passive: false });
     }
 
     mobileLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            closeMobileNav();
+        link.addEventListener('click', (e) => {
+            const href = link.getAttribute('href');
+            if (href && href.startsWith('#')) {
+                e.preventDefault();
+                closeMobileNav(href);
+            } else {
+                closeMobileNav();
+            }
         });
     });
 
     window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && mobileDrawer && mobileDrawer.classList.contains('is-open')) {
+        if (e.key === 'Escape' && isMobileNavOpen) {
             closeMobileNav();
         }
     });

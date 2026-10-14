@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superline | Electrical Engineering &amp; Architectural Renovation</title>
+    <meta name="description" content="Superline - Certified master electrical engineering, custom architectural renovations, and luxury residential transformations crafted with absolute precision.">
+
+    <!-- Favicon (Using official Superline Logo) -->
+    <link rel="icon" type="image/jpeg" href="assets/logo/logo.jpg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Manrope:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- External Animation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="theme-light" oncontextmenu="return false;" ondragstart="return false;">
+
+    <!-- Liquid SVG Filter -->
+    <svg style="width:0;height:0;position:absolute;">
+        <filter id="liquidFilter">
+            <feTurbulence type="fractalNoise" baseFrequency="0.015" numOctaves="3" result="warp"></feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="warp" scale="0" xChannelSelector="R" yChannelSelector="G" id="liquidMap"></feDisplacementMap>
+        </filter>
+    </svg>
+
+    <!-- Background Noise Overlay -->
+    <div class="noise"></div>
+
+    <!-- Magnetic Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"></div>
+
+    <!-- Preloader -->
+    <div class="loader">
+        <div style="display: flex; align-items: center; gap: 1.4rem;">
+            <img src="assets/logo/logo.jpg" alt="Superline" style="width: 64px; height: 64px; border-radius: 12px; object-fit: contain; background: #000; border: 1px solid rgba(255,255,255,0.25); box-shadow: 0 4px 16px rgba(0,0,0,0.5);">
+            <div>
+                <div class="t-caption" style="letter-spacing: 0.22em; font-weight: 600; color: #fff;">SUPERLINE</div>
+                <div class="t-caption text-muted" style="font-size: 0.65rem; letter-spacing: 0.14em;">Electrical &amp; Renovation</div>
+            </div>
+        </div>
+        <div class="loader-perc">0</div>
+        <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+    </div>
+
+    <!-- Top Navigation -->
+    <nav class="nav">
+        <a href="#home" class="nav-brand hover-target" aria-label="Superline Home">
+            <img src="assets/logo/logo.jpg" alt="Superline Logo" class="brand-logo-img">
+        </a>
+        <div class="nav-menu">
+            <a href="#home" class="nav-link t-caption hover-target">Home</a>
+            <a href="#about" class="nav-link t-caption hover-target">About</a>
+            <a href="#hz-trigger" class="nav-link t-caption hover-target">Services</a>
+            <a href="#gallery" class="nav-link t-caption hover-target">Gallery</a>
+            <a href="#contact" class="nav-link t-caption hover-target">Contact Us</a>
+        </div>
+        <button class="nav-toggle-btn" id="mobileNavToggle" aria-label="Open mobile navigation menu" aria-expanded="false">
+            <span class="nav-toggle-line line-1"></span>
+            <span class="nav-toggle-line line-2"></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Navigation Drawer -->
+    <div class="mobile-nav-drawer" id="mobileNavDrawer" aria-hidden="true" role="dialog" aria-label="Mobile Navigation">
+        <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+        <div class="mobile-nav-inner">
+            <div class="mobile-nav-header">
+                <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <ul class="mobile-nav-links">
+                <li><a href="#home" class="mobile-nav-link"><span class="nav-text">Home</span></a></li>
+                <li><a href="#about" class="mobile-nav-link"><span class="nav-text">About Us</span></a></li>
+                <li><a href="#hz-trigger" class="mobile-nav-link"><span class="nav-text">Services</span></a></li>
+                <li><a href="#gallery" class="mobile-nav-link"><span class="nav-text">Project Gallery</span></a></li>
+                <li><a href="#contact" class="mobile-nav-link"><span class="nav-text">Contact Us</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <main>
+
+        <!-- 01. Hero Section -->
+        <section class="section s-hero padding-x" id="home">
+            <div class="hero-content">
+                <div class="t-caption text-muted mb-4 gs-fade" style="letter-spacing: 0.25em;">ELECTRICAL · RENOVATION · SMART LIGHTING</div>
+                <h1 class="t-display split-words">Super Line</h1>
+                <h1 class="t-display split-words" style="margin-left: 8vw;"><span class="italic">Electrical</span> &amp; Renovation</h1>
+            </div>
+            
+            <div class="img-mask hero-img-box hover-scale hover-target" id="hero-img">
+                <img src="assets/images/IMG_6218.jpg" class="img-parallax" alt="Superline finished residential renovation interior">
+            </div>
+        </section>
+
+        <!-- 02. Cinematic Expand Section -->
+        <section class="section s-expand theme-dark" id="expand-trigger">
+            <div class="expand-wrapper">
+                <div class="expand-container hover-target" id="expand-box">
+                    <img loading="lazy" src="assets/images/WhatsApp%20Image%202026-10-13%20at%2011.12.40%20PM.jpg" alt="Signature Superline bathroom renovation and custom pendant lighting" class="expand-img" id="expand-img">
+                </div>
+                <div class="expand-text w-full flex-center">
+                    <div class="t-caption mb-4" style="letter-spacing: 0.3em; color: rgba(255,255,255,0.7);">The Superline Standard</div>
+                    <h2 class="t-display italic" style="color: #fff;">Crafted.</h2>
+                </div>
+            </div>
+        </section>
+
+        <!-- 03. About Us / Narrative Section -->
+        <section class="section s-creative padding-y padding-x theme-light" id="about">
+            <div class="flex-center w-full mx-auto mb-8 gs-fade" style="text-align: center;">
+                <div class="t-caption text-accent mb-3" style="letter-spacing: 0.25em;">WHO WE ARE</div>
+                <h2 class="t-h2" style="font-family: var(--font-sans); font-size: clamp(2.2rem, 4vw, 4.2rem); font-weight: 300; letter-spacing: -0.02em; color: #111111;">About Us</h2>
+            </div>
+
+            <div class="hl-container">
+                <span class="hl-word">Master</span>
+                <span class="hl-word">electrical</span>
+                <span class="hl-word">and</span>
+                <span class="hl-word">complete</span>
+                <span class="hl-word">renovation,</span>
+                <span class="hl-word">engineered</span>
+                <span class="hl-word">with</span>
+                <span class="hl-word">precision.</span>
+                <span class="hl-word">From</span>
+                <span class="hl-word">certified</span>
+                <span class="hl-word">panel</span>
+                <span class="hl-word">upgrades</span>
+                <span class="hl-word">and</span>
+                <span class="hl-word">smart</span>
+                <span class="hl-word">lighting</span>
+                <span class="hl-word">to</span>
+                <span class="hl-word">full</span>
+                <span class="hl-word">interior</span>
+                <span class="hl-word">remodeling,</span>
+
+                <br class="desktop-only">
+
+                <span class="hl-word">we</span>
+                <span class="hl-word">transform</span>
+                <span class="hl-word">every</span>
+                <span class="hl-word">residence</span>
+                <span class="hl-word">from</span>
+                <span class="hl-word">the</span>
+                <span class="hl-word">wiring</span>
+                <span class="hl-word">within</span>
+                <span class="hl-word">to</span>
+                <span class="hl-word">the</span>
+                <span class="hl-word">flawless</span>
+                <span class="hl-word">finish.</span>
+
+                <div style="height: 4vh; width: 100%;"></div>
+
+                <span class="hl-word">One</span>
+                <span class="hl-word">team.</span>
+                <span class="hl-word">One</span>
+                <span class="hl-word">standard.</span>
+                <span class="hl-word">Super</span>
+                <span class="hl-word">Line.</span>
+            </div>
+        </section>
+
+        <!-- 04. Horizontal Gallery Section -->
+        <section class="s-horiz theme-light" id="hz-trigger">
+            <div class="horiz-track">
+                <div class="h-panel">
+                    <div class="h-img hover-scale hover-target">
+                        <img loading="eager" decoding="async" src="assets/images/WhatsApp%20Image%202026-10-13%20at%2011.25.42%20PM.jpg" class="h-img-el" alt="Precision electrical panel installation and wiring">
+                    </div>
+                </div>
+
+                <div class="h-panel">
+                    <div class="h-img hover-scale hover-target">
+                        <img loading="eager" decoding="async" src="assets/images/IMG_6708.jpg" class="h-img-el" alt="Architectural residential renovation corridor with pot lighting">
+                    </div>
+                </div>
+
+                <div class="h-panel">
+                    <div class="h-img hover-scale hover-target">
+                        <img loading="eager" decoding="async" src="assets/images/WhatsApp%20Image%202026-10-13%20at%2011.12.40%20PM.jpg" class="h-img-el" alt="Luxury bathroom renovation with modern globe lighting and custom vanity">
+                    </div>
+                </div>
+
+                <div class="h-panel">
+                    <div class="h-img hover-scale hover-target">
+                        <img loading="eager" decoding="async" src="assets/images/IMG_6218.jpg" class="h-img-el" alt="Finished open-concept living suite with hardwood flooring">
+                    </div>
+                </div>
+
+                <div class="h-panel">
+                    <div class="h-img hover-scale hover-target">
+                        <img loading="eager" decoding="async" src="assets/images/WhatsApp%20Image%202026-10-13%20at%2011.11.57%20PM%20(1).jpg" class="h-img-el" alt="Master electrical panel installation">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 05. Infinite Marquee Section -->
+        <section class="section theme-dark s-marquee" id="theme-trigger-dark">
+            <div class="marquee-wrap">
+                <h1 class="marquee-text">SUPERLINE ✦ ELECTRICAL &amp; RENOVATION </h1>
+                <h1 class="marquee-text">SUPERLINE ✦ ELECTRICAL &amp; RENOVATION </h1>
+                <h1 class="marquee-text">SUPERLINE ✦ ELECTRICAL &amp; RENOVATION </h1>
+            </div>
+        </section>
+
+        <!-- 06. Gallery Section (All 33 Project Images) -->
+        <section class="section padding-y padding-x theme-light" id="gallery">
+            <div class="flex-center w-full mx-auto mb-10 gs-fade" style="text-align: center;">
+                <div class="t-caption text-accent mb-3" style="letter-spacing: 0.25em;">PROJECT ARCHIVE</div>
+                <h2 class="t-h2" style="font-family: var(--font-sans); font-size: clamp(2.4rem, 4.5vw, 4.6rem); font-weight: 300; letter-spacing: -0.02em; color: #111111;">Gallery</h2>
+            </div>
+
+            <div class="archive-grid">
+                <!-- Column 1 (11 Images) -->
+                <div class="grid-col" data-speed="1.15">
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="eager" fetchpriority="high" decoding="async" src="assets/images/IMG_0095.jpg" class="img-parallax" alt="Interior door, casing, and electrical finish"></div>
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="eager" fetchpriority="high" decoding="async" src="assets/images/IMG_0098.jpg" class="img-parallax" alt="Custom closet carpentry and electrical wiring"></div>
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_0099.jpg" class="img-parallax" alt="Hardwood floor installation and baseboard finishing"></div>
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_0100.jpg" class="img-parallax" alt="Precision door framing and wall trim carpentry"></div>
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_0101.jpg" class="img-parallax" alt="Detailed door handle, hinges, and custom millwork"></div>
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_0102.jpg" class="img-parallax" alt="Modern interior passage door and lighting switchgear"></div>
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_0103.jpg" class="img-parallax" alt="Renovated room entrance and smooth ceiling plaster"></div>
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_0104.jpg" class="img-parallax" alt="Baseboard and floor transition finishing"></div>
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_0105.jpg" class="img-parallax" alt="Interior hallway door casing and electrical switches"></div>
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_0106.jpg" class="img-parallax" alt="Custom interior door and modern trim detail"></div>
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_5676.jpg" class="img-parallax" alt="Architectural renovation rough-in and electrical wiring"></div>
+                </div>
+
+                <!-- Column 2 (11 Images) -->
+                <div class="grid-col" data-speed="0.85">
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="eager" fetchpriority="high" decoding="async" src="assets/images/IMG_5677%20(1).jpg" class="img-parallax" alt="Electrical wiring rough-in and framing"></div>
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="eager" fetchpriority="high" decoding="async" src="assets/images/IMG_5697.jpg" class="img-parallax" alt="Pot light wiring layout and ceiling preparation"></div>
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_5698.jpg" class="img-parallax" alt="Recessed ceiling lighting box installation"></div>
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_5699.jpg" class="img-parallax" alt="Rough-in wiring and ceiling drywall framing"></div>
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_5700.jpg" class="img-parallax" alt="Wall receptacle box and electrical conduits"></div>
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_5701.jpg" class="img-parallax" alt="Ceiling pot light rough-in circuits"></div>
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_5702.jpg" class="img-parallax" alt="Framing and certified electrical cabling"></div>
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_5704.jpg" class="img-parallax" alt="Interior renovation framing and overhead pot lights"></div>
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_5707.jpg" class="img-parallax" alt="Hallway ceiling pot light layout in progress"></div>
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_5714.jpg" class="img-parallax" alt="Structural framing and electrical rough-in"></div>
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_5716.jpg" class="img-parallax" alt="Ceiling fixture wiring and framing prep"></div>
+                </div>
+
+                <!-- Column 3 (11 Images) -->
+                <div class="grid-col" data-speed="1.1">
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="eager" fetchpriority="high" decoding="async" src="assets/images/IMG_5718%20(1).jpg" class="img-parallax" alt="Electrical circuitry and junction box wiring"></div>
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="eager" fetchpriority="high" decoding="async" src="assets/images/IMG_6218.jpg" class="img-parallax" alt="Finished open-concept living suite with hardwood flooring"></div>
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_6708.jpg" class="img-parallax" alt="Architectural renovation corridor with LED pot lights"></div>
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_6711.jpg" class="img-parallax" alt="Renovated hallway with finished trim, doors, and pot lights"></div>
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_6712.jpg" class="img-parallax" alt="Modern renovated corridor and recessed illumination"></div>
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/IMG_6713.jpg" class="img-parallax" alt="Finished entry hall and contemporary switchplates"></div>
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/WhatsApp%20Image%202026-10-13%20at%2011.11.57%20PM%20(1).jpg" class="img-parallax" alt="Certified 200A service breaker panel wiring detail"></div>
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/WhatsApp%20Image%202026-10-13%20at%2011.11.57%20PM.jpg" class="img-parallax" alt="Precision breaker panel wiring craftsmanship"></div>
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/WhatsApp%20Image%202026-10-13%20at%2011.12.40%20PM%20(1).jpg" class="img-parallax" alt="Luxury bathroom renovation with custom hexagonal marble tile"></div>
+                    <div class="img-mask ar-square hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/WhatsApp%20Image%202026-10-13%20at%2011.12.40%20PM.jpg" class="img-parallax" alt="Luxury vanity with custom globe pendant lighting"></div>
+                    <div class="img-mask ar-portrait hover-scale hover-target"><img loading="lazy" decoding="async" src="assets/images/WhatsApp%20Image%202026-10-13%20at%2011.25.42%20PM.jpg" class="img-parallax" alt="Master electrical breaker panel installation"></div>
+                </div>
+            </div>
+
+            <!-- Gallery Progressive Load More -->
+            <div class="gallery-load-more-wrap" id="galleryLoadMoreWrap">
+                <button type="button" id="galleryLoadMoreBtn" class="gallery-load-more-btn hover-target" aria-label="Load more project photos">
+                    <span class="btn-text">Load More Projects</span>
+                    <span class="btn-count" id="galleryCountBadge">4 / 33</span>
+                    <svg class="btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <polyline points="19 12 12 19 5 12"></polyline>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- 07. Contact Us Section -->
+        <section class="section padding-y padding-x theme-light s-contact" id="contact">
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h2 class="t-h2 gs-fade mb-6" style="font-size: clamp(2.4rem, 4.5vw, 4.5rem); line-height: 1.05; color: #111111; font-family: var(--font-sans); font-weight: 300;">
+                        Contact Us
+                    </h2>
+
+                    <div class="contact-details-list gs-fade" style="margin-top: 1rem;">
+                        <div class="contact-card">
+                            <div class="contact-card-icon">✉️</div>
+                            <div>
+                                <div class="t-caption text-muted">Email</div>
+                                <a href="mailto:info@superlineelectricalandrenovation.ca" class="contact-link">info@superlineelectricalandrenovation.ca</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form-wrap gs-fade">
+                    <form class="contact-form" id="contactForm" onsubmit="handleContactSubmit(event)">
+                        <h3 class="t-h3 mb-6" style="font-style: normal; font-family: var(--font-sans); font-size: 1.6rem; font-weight: 500; color: #111111;">Request a Free Consultation</h3>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="clientName" class="form-label">Your Name</label>
+                                <input type="text" id="clientName" name="name" class="form-input" placeholder="e.g. David Miller" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="clientPhone" class="form-label">Phone Number</label>
+                                <input type="tel" id="clientPhone" name="phone" class="form-input" placeholder="e.g. (647) 000-0000" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="clientEmail" class="form-label">Email Address</label>
+                            <input type="email" id="clientEmail" name="email" class="form-input" placeholder="e.g. david@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="serviceType" class="form-label">Service Required</label>
+                            <select id="serviceType" name="service" class="form-input form-select" required>
+                                <option value="" disabled selected>Select service category...</option>
+                                <option value="Electrical Panel Upgrade">200A / 400A Electrical Panel Upgrade</option>
+                                <option value="Whole Home Rewiring">Whole-Home Electrical Rewiring &amp; EV Charger</option>
+                                <option value="Full Residential Renovation">Full Residential Renovation</option>
+                                <option value="Bathroom Remodeling">Luxury Bathroom Remodeling &amp; Tile</option>
+                                <option value="Basement Suite Renovation">Basement Suite Renovation &amp; Code Compliance</option>
+                                <option value="Architectural Lighting">Architectural Pot Lights &amp; Smart Dimming</option>
+                                <option value="Other Project">Other Custom Electrical / Renovation Project</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="projectDetails" class="form-label">Project Details</label>
+                            <textarea id="projectDetails" name="message" rows="4" class="form-input form-textarea" placeholder="Tell us about your space, timeline, and goals..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="form-submit-btn hover-target">
+                            <span>Send Consultation Request</span>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </button>
+                        <div class="form-feedback" id="formFeedback"></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 08. Full Web Page Footer -->
+    <footer class="site-footer theme-light">
+        <div class="footer-top padding-x">
+            <div class="footer-grid">
+                <!-- Brand Column -->
+                <div class="footer-col footer-brand-col">
+                    <a href="#home" class="footer-logo-link">
+                        <img src="assets/logo/logo.jpg" alt="Superline Electrical &amp; Renovation" class="footer-logo-img">
+                        <div>
+                            <div class="footer-brand-title">SUPERLINE</div>
+                            <div class="footer-brand-sub">Electrical &amp; Renovation</div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Quick Navigation (Valid & Important) -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Navigation</h4>
+                    <ul class="footer-links">
+                        <li><a href="#home" class="footer-link hover-target">Home</a></li>
+                        <li><a href="#about" class="footer-link hover-target">About Us</a></li>
+                        <li><a href="#hz-trigger" class="footer-link hover-target">Services</a></li>
+                        <li><a href="#gallery" class="footer-link hover-target">Project Gallery</a></li>
+                        <li><a href="#contact" class="footer-link hover-target">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Direct Inquiries & Details -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Direct Details</h4>
+                    <ul class="footer-links">
+                        <li>
+                            <div class="t-caption text-muted" style="margin-bottom: 2px;">Email</div>
+                            <a href="mailto:info@superlineelectricalandrenovation.ca" class="footer-link hover-target">info@superlineelectricalandrenovation.ca</a>
+                        </li>
+                    </ul>
+                    <a href="#contact" class="footer-cta-btn hover-target" style="display: inline-block; margin-top: 1.5rem;">Book Consultation →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="footer-bottom padding-x">
+            <div class="footer-bottom-inner">
+                <div class="t-caption text-muted">© 2026 superlineelectricalandrenovation.ca. All rights reserved.</div>
+                <div class="footer-legal-links">
+                    <a href="#home" class="t-caption text-accent hover-target" onclick="window.scrollTo({top:0, behavior:'smooth'}); return false;">Back to Top ↑</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Fullscreen Image Preview Lightbox Modal -->
+    <div class="img-preview-modal" id="imagePreviewModal" aria-hidden="true" role="dialog" aria-label="Image Preview">
+        <div class="modal-backdrop" id="modalBackdrop"></div>
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close image preview">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+        <div class="modal-content-wrap">
+            <div class="modal-img-container">
+                <img src="" alt="Full Preview" id="modalPreviewImg" class="modal-img">
+                <div class="modal-caption" id="modalCaption"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom JavaScript Engine -->
+    <script src="js/main.js"></script>
+</body>
+</html>

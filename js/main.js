@@ -444,62 +444,193 @@ document.addEventListener("DOMContentLoaded", () => {
 
         let isDown = false;
         let startX = 0;
-        let scrollLeft = 0;
-        let dragDistance = 0;
+        let startScrollLeft = 0;
+        let lastX = 0;
+        let lastTime = 0;
+        let velocity = 0;
+        let rafId = null;
+        let isDragging = false;
+        let totalDelta = 0;
 
         window.isDraggingHoriz = false;
 
-        // Desktop mouse drag to slide
-        track.addEventListener('mousedown', (e) => {
+        function stopMomentum() {
+            if (rafId) {
+                cancelAnimationFrame(rafId);
+                rafId = null;
+            }
+        }
+
+        function snapToNearestCard() {
+            const panels = track.querySelectorAll('.h-panel');
+            if (!panels.length) return;
+
+            const trackRect = track.getBoundingClientRect();
+            const trackCenter = trackRect.left + trackRect.width / 2;
+
+            let closestPanel = null;
+            let closestDistance = Infinity;
+
+            panels.forEach(panel => {
+                const rect = panel.getBoundingClientRect();
+                const panelCenter = rect.left + rect.width / 2;
+                const dist = Math.abs(panelCenter - trackCenter);
+                if (dist < closestDistance) {
+                    closestDistance = dist;
+                    closestPanel = panel;
+                }
+            });
+
+            if (closestPanel) {
+                const targetLeft = closestPanel.offsetLeft - (track.clientWidth - closestPanel.offsetWidth) / 2;
+                track.scrollTo({
+                    left: Math.max(0, targetLeft),
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        function startMomentum() {
+            stopMomentum();
+
+            // If drag had very low velocity, snap gently to nearest card
+            if (Math.abs(velocity) < 0.12) {
+                track.classList.remove('is-dragging');
+                snapToNearestCard();
+                setTimeout(() => {
+                    window.isDraggingHoriz = false;
+                }, 80);
+                return;
+            }
+
+            const friction = 0.94;
+            let currentVel = velocity * 15;
+            const maxScroll = track.scrollWidth - track.clientWidth;
+
+            function momentumStep() {
+                currentVel *= friction;
+
+                if (Math.abs(currentVel) > 0.4) {
+                    track.scrollLeft -= currentVel;
+
+                    if (track.scrollLeft <= 0 || track.scrollLeft >= maxScroll) {
+                        currentVel = 0;
+                    } else {
+                        rafId = requestAnimationFrame(momentumStep);
+                        return;
+                    }
+                }
+
+                track.classList.remove('is-dragging');
+                snapToNearestCard();
+                setTimeout(() => {
+                    window.isDraggingHoriz = false;
+                }, 80);
+            }
+
+            rafId = requestAnimationFrame(momentumStep);
+        }
+
+        // Universal Pointer event handlers (Mouse, Touch, Stylus)
+        track.addEventListener('pointerdown', (e) => {
+            if (e.pointerType === 'mouse' && e.button !== 0) return;
+
+            stopMomentum();
             isDown = true;
-            dragDistance = 0;
+            isDragging = false;
             window.isDraggingHoriz = false;
-            track.classList.add('is-dragging');
-            startX = e.pageX - track.offsetLeft;
-            scrollLeft = track.scrollLeft;
+            totalDelta = 0;
+
+            startX = e.clientX;
+            lastX = e.clientX;
+            lastTime = performance.now();
+            startScrollLeft = track.scrollLeft;
+            velocity = 0;
+
+            try {
+                track.setPointerCapture(e.pointerId);
+            } catch (err) {}
         });
 
-        const endDrag = () => {
+        track.addEventListener('pointermove', (e) => {
+            if (!isDown) return;
+
+            const currentX = e.clientX;
+            const now = performance.now();
+            const deltaX = currentX - lastX;
+            const dt = Math.max(now - lastTime, 1);
+
+            totalDelta += Math.abs(currentX - startX);
+
+            if (totalDelta > 6 && !isDragging) {
+                isDragging = true;
+                window.isDraggingHoriz = true;
+                track.classList.add('is-dragging');
+            }
+
+            if (isDragging) {
+                e.preventDefault();
+
+                // Compute smoothed instantaneous velocity
+                const instantVel = deltaX / dt;
+                velocity = velocity * 0.35 + instantVel * 0.65;
+
+                // Smooth direct drag movement
+                const walk = (currentX - startX) * 1.2;
+                track.scrollLeft = startScrollLeft - walk;
+            }
+
+            lastX = currentX;
+            lastTime = now;
+        });
+
+        const handlePointerEnd = (e) => {
             if (!isDown) return;
             isDown = false;
-            track.classList.remove('is-dragging');
-            setTimeout(() => {
+
+            try {
+                if (track.hasPointerCapture(e.pointerId)) {
+                    track.releasePointerCapture(e.pointerId);
+                }
+            } catch (err) {}
+
+            if (isDragging) {
+                startMomentum();
+            } else {
+                track.classList.remove('is-dragging');
                 window.isDraggingHoriz = false;
-            }, 60);
+            }
         };
 
-        track.addEventListener('mouseleave', endDrag);
-        track.addEventListener('mouseup', endDrag);
+        track.addEventListener('pointerup', handlePointerEnd);
+        track.addEventListener('pointercancel', handlePointerEnd);
 
-        track.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - track.offsetLeft;
-            const walk = (x - startX) * 1.5;
-            dragDistance += Math.abs(x - startX);
-            if (dragDistance > 8) {
-                window.isDraggingHoriz = true;
-            }
-            track.scrollLeft = scrollLeft - walk;
+        // Prevent browser native image ghost dragging
+        track.querySelectorAll('img').forEach(img => {
+            img.addEventListener('dragstart', (e) => e.preventDefault());
         });
 
-        // Navigation arrow buttons
+        // Navigation arrow buttons with fluid stepping
         const prevBtn = document.getElementById('horizPrevBtn');
         const nextBtn = document.getElementById('horizNextBtn');
 
         if (prevBtn) {
             prevBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                const step = track.querySelector('.h-panel')?.offsetWidth || 340;
-                track.scrollBy({ left: -(step + 24), behavior: 'smooth' });
+                stopMomentum();
+                const step = track.querySelector('.h-panel')?.offsetWidth || 400;
+                const gap = parseInt(window.getComputedStyle(track).gap) || 24;
+                track.scrollBy({ left: -(step + gap), behavior: 'smooth' });
             });
         }
 
         if (nextBtn) {
             nextBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                const step = track.querySelector('.h-panel')?.offsetWidth || 340;
-                track.scrollBy({ left: step + 24, behavior: 'smooth' });
+                stopMomentum();
+                const step = track.querySelector('.h-panel')?.offsetWidth || 400;
+                const gap = parseInt(window.getComputedStyle(track).gap) || 24;
+                track.scrollBy({ left: (step + gap), behavior: 'smooth' });
             });
         }
     }

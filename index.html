@@ -39,18 +39,7 @@
     <div class="cursor-dot"></div>
     <div class="cursor-ring"></div>
 
-    <!-- Preloader -->
-    <div class="loader">
-        <div style="display: flex; align-items: center; gap: 1.4rem;">
-            <img src="assets/logo/logo.jpg" alt="Superline" style="width: 64px; height: 64px; border-radius: 12px; object-fit: contain; background: #000; border: 1px solid rgba(255,255,255,0.25); box-shadow: 0 4px 16px rgba(0,0,0,0.5);">
-            <div>
-                <div class="t-caption" style="letter-spacing: 0.22em; font-weight: 600; color: #fff;">SUPERLINE</div>
-                <div class="t-caption text-muted" style="font-size: 0.65rem; letter-spacing: 0.14em;">Electrical &amp; Renovation</div>
-            </div>
-        </div>
-        <div class="loader-perc">0</div>
-        <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
-    </div>
+
 
     <!-- Top Navigation -->
     <nav class="nav">
@@ -126,83 +115,58 @@
                 <h2 class="t-h2" style="font-family: var(--font-sans); font-size: clamp(2.2rem, 4vw, 4.2rem); font-weight: 300; letter-spacing: -0.02em; color: #111111;">About Us</h2>
             </div>
 
-            <div class="hl-container">
-                <span class="hl-word">Master</span>
-                <span class="hl-word">electrical</span>
-                <span class="hl-word">and</span>
-                <span class="hl-word">complete</span>
-                <span class="hl-word">renovation,</span>
-                <span class="hl-word">engineered</span>
-                <span class="hl-word">with</span>
-                <span class="hl-word">precision.</span>
-                <span class="hl-word">From</span>
-                <span class="hl-word">certified</span>
-                <span class="hl-word">panel</span>
-                <span class="hl-word">upgrades</span>
-                <span class="hl-word">and</span>
-                <span class="hl-word">smart</span>
-                <span class="hl-word">lighting</span>
-                <span class="hl-word">to</span>
-                <span class="hl-word">full</span>
-                <span class="hl-word">interior</span>
-                <span class="hl-word">remodeling,</span>
-
-                <br class="desktop-only">
-
-                <span class="hl-word">we</span>
-                <span class="hl-word">transform</span>
-                <span class="hl-word">every</span>
-                <span class="hl-word">residence</span>
-                <span class="hl-word">from</span>
-                <span class="hl-word">the</span>
-                <span class="hl-word">wiring</span>
-                <span class="hl-word">within</span>
-                <span class="hl-word">to</span>
-                <span class="hl-word">the</span>
-                <span class="hl-word">flawless</span>
-                <span class="hl-word">finish.</span>
-
-                <div style="height: 4vh; width: 100%;"></div>
-
-                <span class="hl-word">One</span>
-                <span class="hl-word">team.</span>
-                <span class="hl-word">One</span>
-                <span class="hl-word">standard.</span>
-                <span class="hl-word">Super</span>
-                <span class="hl-word">Line.</span>
+            <div class="hl-container gs-fade">
+                <p>At Superline Electrical and Renovation, we are committed to transforming houses and commercial spaces into functional, comfortable, and beautiful environments. Based in Ontario, Canada, we specialize primarily in renovation services, with additional electrical services to meet our customers’ needs.</p>
+                <p>Whether you are planning to update a single room, renovate your entire home, improve your commercial space, or complete electrical improvements, our goal is to deliver quality workmanship, reliable service, and attention to detail on every project.</p>
             </div>
         </section>
 
-        <!-- 04. Horizontal Gallery Section -->
+        <!-- 04. Featured Work / Manual Horizontal Slider Section -->
         <section class="s-horiz theme-light" id="hz-trigger">
-            <div class="horiz-track">
-                <div class="h-panel">
-                    <div class="h-img hover-scale hover-target">
-                        <img loading="eager" decoding="async" src="assets/images/WhatsApp%20Image%202026-10-13%20at%2011.25.42%20PM.jpg" class="h-img-el" alt="Precision electrical panel installation and wiring">
+            <div class="s-horiz-header padding-x">
+                <h2 class="t-h2 gs-fade" style="font-family: var(--font-sans); font-size: clamp(2rem, 3.8vw, 3.8rem); font-weight: 300; letter-spacing: -0.02em; color: #111111;">Featured Services</h2>
+                <div class="horiz-nav-controls gs-fade">
+                    <div class="horiz-btn-group">
+                        <button type="button" class="horiz-control-btn" id="horizPrevBtn" aria-label="Slide left">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        </button>
+                        <button type="button" class="horiz-control-btn" id="horizNextBtn" aria-label="Slide right">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </button>
                     </div>
                 </div>
+            </div>
 
-                <div class="h-panel">
-                    <div class="h-img hover-scale hover-target">
-                        <img loading="eager" decoding="async" src="assets/images/IMG_6708.jpg" class="h-img-el" alt="Architectural residential renovation corridor with pot lighting">
+            <div class="horiz-track-wrapper">
+                <div class="horiz-track" id="horizTrack">
+                    <div class="h-panel">
+                        <div class="h-img hover-scale hover-target">
+                            <img loading="eager" decoding="async" src="assets/images/WhatsApp%20Image%202026-10-13%20at%2011.25.42%20PM.jpg" class="h-img-el" alt="Precision electrical panel installation and wiring">
+                        </div>
                     </div>
-                </div>
 
-                <div class="h-panel">
-                    <div class="h-img hover-scale hover-target">
-                        <img loading="eager" decoding="async" src="assets/images/WhatsApp%20Image%202026-10-13%20at%2011.12.40%20PM.jpg" class="h-img-el" alt="Luxury bathroom renovation with modern globe lighting and custom vanity">
+                    <div class="h-panel">
+                        <div class="h-img hover-scale hover-target">
+                            <img loading="eager" decoding="async" src="assets/images/IMG_6708.jpg" class="h-img-el" alt="Architectural residential renovation corridor with pot lighting">
+                        </div>
                     </div>
-                </div>
 
-                <div class="h-panel">
-                    <div class="h-img hover-scale hover-target">
-                        <img loading="eager" decoding="async" src="assets/images/IMG_6218.jpg" class="h-img-el" alt="Finished open-concept living suite with hardwood flooring">
+                    <div class="h-panel">
+                        <div class="h-img hover-scale hover-target">
+                            <img loading="eager" decoding="async" src="assets/images/WhatsApp%20Image%202026-10-13%20at%2011.12.40%20PM.jpg" class="h-img-el" alt="Luxury bathroom renovation with modern globe lighting and custom vanity">
+                        </div>
                     </div>
-                </div>
 
-                <div class="h-panel">
-                    <div class="h-img hover-scale hover-target">
-                        <img loading="eager" decoding="async" src="assets/images/WhatsApp%20Image%202026-10-13%20at%2011.11.57%20PM%20(1).jpg" class="h-img-el" alt="Master electrical panel installation">
+                    <div class="h-panel">
+                        <div class="h-img hover-scale hover-target">
+                            <img loading="eager" decoding="async" src="assets/images/IMG_6218.jpg" class="h-img-el" alt="Finished open-concept living suite with hardwood flooring">
+                        </div>
+                    </div>
+
+                    <div class="h-panel">
+                        <div class="h-img hover-scale hover-target">
+                            <img loading="eager" decoding="async" src="assets/images/WhatsApp%20Image%202026-10-13%20at%2011.11.57%20PM%20(1).jpg" class="h-img-el" alt="Master electrical panel installation">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -294,9 +258,39 @@
 
                     <div class="contact-details-list gs-fade" style="margin-top: 1rem;">
                         <div class="contact-card">
-                            <div class="contact-card-icon">✉️</div>
+                            <div class="contact-card-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                                </svg>
+                            </div>
                             <div>
-                                <div class="t-caption text-muted">Email</div>
+                                <div class="t-caption text-muted">Phone</div>
+                                <a href="tel:+16476076643" class="contact-link">+1 647 607 6643</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-card-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22 6 12 13 2 6"></polyline>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="t-caption text-muted">Primary Email</div>
+                                <a href="mailto:superlinelecandreno@gmail.com" class="contact-link">superlinelecandreno@gmail.com</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-card-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22 6 12 13 2 6"></polyline>
+                                </svg>
+                            </div>
+                            <div>
+                                <div class="t-caption text-muted">Secondary Email</div>
                                 <a href="mailto:info@superlineelectricalandrenovation.ca" class="contact-link">info@superlineelectricalandrenovation.ca</a>
                             </div>
                         </div>
@@ -304,7 +298,9 @@
                 </div>
 
                 <div class="contact-form-wrap gs-fade">
-                    <form class="contact-form" id="contactForm" action="https://formsubmit.co/ajax/info@superlineelectricalandrenovation.ca" method="POST" onsubmit="handleContactSubmit(event)">
+                    <form class="contact-form" id="contactForm" action="https://formsubmit.co/ajax/superlinelecandreno@gmail.com" method="POST" onsubmit="handleContactSubmit(event)">
+                        <!-- FormSubmit Configuration Fields -->
+                        <input type="hidden" name="_cc" value="info@superlineelectricalandrenovation.ca">
                         <!-- FormSubmit Configuration Fields -->
                         <input type="hidden" name="_captcha" value="false">
                         <input type="hidden" name="_template" value="table">
@@ -394,7 +390,15 @@
                     <h4 class="footer-heading">Direct Details</h4>
                     <ul class="footer-links">
                         <li>
-                            <div class="t-caption text-muted" style="margin-bottom: 2px;">Email</div>
+                            <div class="t-caption text-muted" style="margin-bottom: 2px;">Phone</div>
+                            <a href="tel:+16476076643" class="footer-link hover-target">+1 647 607 6643</a>
+                        </li>
+                        <li style="margin-top: 0.75rem;">
+                            <div class="t-caption text-muted" style="margin-bottom: 2px;">Primary Email</div>
+                            <a href="mailto:superlinelecandreno@gmail.com" class="footer-link hover-target">superlinelecandreno@gmail.com</a>
+                        </li>
+                        <li style="margin-top: 0.75rem;">
+                            <div class="t-caption text-muted" style="margin-bottom: 2px;">Secondary Email</div>
                             <a href="mailto:info@superlineelectricalandrenovation.ca" class="footer-link hover-target">info@superlineelectricalandrenovation.ca</a>
                         </li>
                     </ul>

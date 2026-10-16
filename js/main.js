@@ -141,54 +141,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // =========================================================================
-    // 05. CINEMATIC PRELOADER
+    // 05. DIRECT PAGE OPENING & HERO DISPLAY (Preloader Removed)
     // =========================================================================
-    let progress = { val: 0 };
-    const percEl = document.querySelector('.loader-perc');
-    const tlLoader = gsap.timeline({ 
-        onComplete: () => { 
-            if (lenis) lenis.start(); 
-            initScrollAnimations(); 
-        } 
-    });
+    if (loader) loader.remove();
+    if (lenis) lenis.start();
+    initScrollAnimations();
 
-    if (loader) {
-        loader.addEventListener('click', () => {
-            tlLoader.progress(1);
-        });
-    }
-
-    tlLoader.to(progress, {
-        val: 100, 
-        duration: 1.2, 
-        ease: "power2.inOut",
-        onUpdate: () => {
-            if (percEl) percEl.innerText = Math.round(progress.val);
-            gsap.set('.loader-bar', { width: progress.val + "%" });
-        }
-    })
-    .to('.loader', { yPercent: -100, duration: 0.8, ease: "power4.inOut", delay: 0.1 })
-    .to('#hero-img', { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)", duration: 1.4, ease: "power4.inOut" }, "-=0.6")
-    .fromTo('#hero-img .img-parallax', { scale: 1.2 }, { scale: 1, duration: 1.8, ease: "power3.out" }, "-=1.4")
-    .to('.s-hero .word', { y: '0%', duration: 1, stagger: 0.04, ease: "power4.out" }, "-=1.2")
-    .to('.s-hero .gs-fade', { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, "-=1.0");
+    // Directly reveal hero elements immediately on load
+    gsap.set('#hero-img', { clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" });
+    gsap.set('#hero-img .img-parallax', { scale: 1 });
+    gsap.set('.s-hero .word', { y: '0%' });
+    gsap.set('.s-hero .gs-fade', { opacity: 1, y: 0 });
 
     // =========================================================================
     // 06. CORE SCROLL ANIMATIONS FUNCTION
     // =========================================================================
     function initScrollAnimations() {
         
-        // A. Highlight words reveal
-        gsap.to('.hl-word', {
-            opacity: 1, 
-            stagger: 0.04,
-            scrollTrigger: { 
-                trigger: ".hl-container", 
-                start: "top 75%", 
-                end: "bottom 60%", 
-                scrub: 1 
-            }
-        });
+        // A. Highlight words reveal (if present)
+        if (document.querySelector('.hl-word')) {
+            gsap.to('.hl-word', {
+                opacity: 1, 
+                stagger: 0.04,
+                scrollTrigger: { 
+                    trigger: ".hl-container", 
+                    start: "top 75%", 
+                    end: "bottom 60%", 
+                    scrub: 1 
+                }
+            });
+        }
 
         // B. Cinematic Expand Section
         // B. Expand Cinematic Image (All Devices)
@@ -219,30 +201,8 @@ document.addEventListener("DOMContentLoaded", () => {
             .to('.expand-text', { opacity: 1, duration: 0.3 }, "-=0.2");
         }
 
-        // C. Horizontal Gallery Scroll (All Devices: Mobile & Desktop)
-        const hTrack = document.querySelector('.horiz-track');
-        const hzSection = document.querySelector('#hz-trigger');
-        if (hTrack && hzSection) {
-            const getScrollAmount = () => -(hTrack.scrollWidth - window.innerWidth);
-            
-            gsap.to(hTrack, {
-                x: getScrollAmount, 
-                ease: "none",
-                scrollTrigger: { 
-                    trigger: "#hz-trigger", 
-                    start: "top top", 
-                    pin: true, 
-                    pinSpacing: true,
-                    anticipatePin: 1,
-                    scrub: 1, 
-                    invalidateOnRefresh: true,
-                    end: () => "+=" + (window.innerWidth <= 1024 
-                        ? Math.max(window.innerHeight * 1.6, hTrack.scrollWidth - window.innerWidth) 
-                        : (hTrack.scrollWidth - window.innerWidth))
-                }
-            });
-
-        }
+        // C. Manual Horizontal Touch-To-Slide & Drag Slider
+        initManualHorizontalSlider();
 
         // D. Infinite Marquee Scroll (Desktop and Tablet > 768px only)
         if (window.innerWidth > 768 && document.querySelector('.s-marquee')) {
@@ -461,6 +421,10 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             el.addEventListener('click', (e) => {
+                // If user was dragging on the horizontal track, do not open preview modal
+                if (el.closest('.horiz-track') && window.isDraggingHoriz) {
+                    return;
+                }
                 e.preventDefault();
                 const src = img.currentSrc || img.src;
                 const alt = img.alt || '';
@@ -470,6 +434,75 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     initImagePreviewLightbox();
+
+    // =========================================================================
+    // 07B. MANUAL HORIZONTAL TOUCH-TO-SLIDE & DRAG CONTROLLER
+    // =========================================================================
+    function initManualHorizontalSlider() {
+        const track = document.getElementById('horizTrack') || document.querySelector('.horiz-track');
+        if (!track) return;
+
+        let isDown = false;
+        let startX = 0;
+        let scrollLeft = 0;
+        let dragDistance = 0;
+
+        window.isDraggingHoriz = false;
+
+        // Desktop mouse drag to slide
+        track.addEventListener('mousedown', (e) => {
+            isDown = true;
+            dragDistance = 0;
+            window.isDraggingHoriz = false;
+            track.classList.add('is-dragging');
+            startX = e.pageX - track.offsetLeft;
+            scrollLeft = track.scrollLeft;
+        });
+
+        const endDrag = () => {
+            if (!isDown) return;
+            isDown = false;
+            track.classList.remove('is-dragging');
+            setTimeout(() => {
+                window.isDraggingHoriz = false;
+            }, 60);
+        };
+
+        track.addEventListener('mouseleave', endDrag);
+        track.addEventListener('mouseup', endDrag);
+
+        track.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - track.offsetLeft;
+            const walk = (x - startX) * 1.5;
+            dragDistance += Math.abs(x - startX);
+            if (dragDistance > 8) {
+                window.isDraggingHoriz = true;
+            }
+            track.scrollLeft = scrollLeft - walk;
+        });
+
+        // Navigation arrow buttons
+        const prevBtn = document.getElementById('horizPrevBtn');
+        const nextBtn = document.getElementById('horizNextBtn');
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const step = track.querySelector('.h-panel')?.offsetWidth || 340;
+                track.scrollBy({ left: -(step + 24), behavior: 'smooth' });
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const step = track.querySelector('.h-panel')?.offsetWidth || 340;
+                track.scrollBy({ left: step + 24, behavior: 'smooth' });
+            });
+        }
+    }
 
     // =========================================================================
     // 08. SECTION 6 GALLERY PROGRESSIVE LOADING CONTROLLER
@@ -609,7 +642,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         try {
-            const response = await fetch("https://formsubmit.co/ajax/info@superlineelectricalandrenovation.ca", {
+            const response = await fetch("https://formsubmit.co/ajax/superlinelecandreno@gmail.com", {
                 method: "POST",
                 headers: { 
                     'Content-Type': 'application/json',
@@ -643,7 +676,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (feedback) {
                 feedback.style.display = 'block';
                 feedback.className = 'form-feedback is-success';
-                feedback.innerHTML = `<strong>Consultation Request Received!</strong> If not sent automatically, you may also <a href="mailto:info@superlineelectricalandrenovation.ca?subject=Consultation%20Request%20from%20${encodeURIComponent(formData.name)}&body=Name:%20${encodeURIComponent(formData.name)}%0D%0APhone:%20${encodeURIComponent(formData.phone)}%0D%0AEmail:%20${encodeURIComponent(formData.email)}%0D%0AService:%20${encodeURIComponent(formData.service)}%0D%0A%0D%0AMessage:%0D%0A${encodeURIComponent(formData.message)}" style="color: var(--accent); font-weight: 600; text-decoration: underline;">click here to email us directly</a>.`;
+                feedback.innerHTML = `<strong>Consultation Request Received!</strong> If not sent automatically, you may also <a href="mailto:superlinelecandreno@gmail.com?cc=info@superlineelectricalandrenovation.ca&subject=Consultation%20Request%20from%20${encodeURIComponent(formData.name)}&body=Name:%20${encodeURIComponent(formData.name)}%0D%0APhone:%20${encodeURIComponent(formData.phone)}%0D%0AEmail:%20${encodeURIComponent(formData.email)}%0D%0AService:%20${encodeURIComponent(formData.service)}%0D%0A%0D%0AMessage:%0D%0A${encodeURIComponent(formData.message)}" style="color: var(--accent); font-weight: 600; text-decoration: underline;">click here to email us directly</a>.`;
             }
             if (submitBtn) {
                 submitBtn.disabled = false;
